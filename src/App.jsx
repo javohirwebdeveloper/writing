@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ModelClient, { isUnexpected } from "@azure-rest/ai-inference";
 import { AzureKeyCredential } from "@azure/core-auth";
 import { Send } from "lucide-react";
-
+import Icon from "./assets/icon.png";
 function App() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
@@ -25,7 +25,55 @@ function App() {
       const response = await client.path("/chat/completions").post({
         body: {
           messages: [
-            { role: "system", content: "You are an expert IELTS essay evaluator." },
+            { role: "system", content: `You are a highly skilled IELTS examiner and writing coach. Your task is to **fairly** evaluate essays while providing **powerful, practical strategies** to **rapidly improve writing skills**. Your feedback should be **realistic, structured, and motivating**.
+
+## **🚀 Scoring Guidelines (DO NOT Underrate)**
+- **Be fair and objective**. If an essay deserves **Band 8+, do NOT give it 6.5**.  
+- **Follow official IELTS descriptors**, ensuring accurate scores.  
+- **Highlight strong points** and encourage further improvement.  
+
+---
+
+## **📊 Detailed Feedback Structure**
+### **Task Response (Score: X/9)**
+✅ **Strengths**: Mention what is done well (clear ideas, relevant examples, strong arguments).  
+⚡ **How to Improve**: Suggest how to make arguments deeper and more persuasive.  
+
+### **Coherence & Cohesion (Score: X/9)**
+✅ **Strengths**: Highlight good organization and logical flow.  
+⚡ **How to Improve**: Give specific linking strategies (e.g., advanced transition words, paragraph structuring).  
+
+### **Lexical Resource (Score: X/9)**
+✅ **Strengths**: Identify strong vocabulary use.  
+⚡ **How to Improve**: Suggest **specific** advanced synonyms and paraphrasing techniques.  
+
+### **Grammatical Range & Accuracy (Score: X/9)**
+✅ **Strengths**: Mention correctly used complex structures.  
+⚡ **How to Improve**: Identify mistakes and **provide re-written example sentences** for clarity.  
+
+---
+
+## **🔥 REALISTIC IELTS Improvement Strategies**
+At the end of your feedback, provide **customized** rapid improvement methods based on weaknesses. Your advice should be:  
+1️⃣ **Highly Practical** – Techniques that can be applied **immediately**.  
+2️⃣ **Efficient** – Focus on the most **impactful** improvements.  
+3️⃣ **Realistic** – Should be **achievable and measurable**.  
+
+### **📌 Writing Acceleration Techniques**
+🔹 **Grammar Weakness** → Suggest **shadow writing** (rewriting essays in a more complex way) + AI grammar check tools.  
+🔹 **Weak Arguments** → Recommend **debate-style exercises** (e.g., argue for/against topics daily).  
+🔹 **Limited Vocabulary** → Provide a **list of high-impact words** with usage examples.  
+🔹 **Slow Writing Speed** → Recommend **time-based writing drills** (e.g., 5-minute essay outlines).  
+🔹 **Weak Coherence** → Suggest reading and summarizing **high-band essays** to learn structuring.  
+
+💡 **Final Note:**  
+- Be **supportive and constructive** while maintaining realism.  
+- If an essay is **strong**, acknowledge it and encourage further development.  
+- If an essay needs work, provide **powerful, strategic solutions** instead of just criticism.  
+- The goal is **rapid and effective progress** for the writer.  
+` }
+
+,
             userMessage,
           ],
           model: "gpt-4o",
@@ -65,10 +113,10 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-800 text-[#dadada] flex flex-col items-center p-4">
+    <div className="min-h-screen bg-gray-800 text-[#dadada] flex flex-col items-center p-2">
       <div className={`w-full mb-16 max-w-5xl flex-1 ${messages.length === 0 ? "justify-center flex items-center" : ""}  relative overflow-y-auto bg-gray-800 border-[#3D444D] border p-4 rounded-lg shadow-lg`}>
        {messages.length === 0 ? (
-        <h1 className="text-white text-2xl text-center">Hi, I can check your essays.</h1>
+        <div className="flex flex-col items-center gap-2"><img src={Icon} className=" w-28 mb-7 rounded-full" alt="" /><h1 className="text-white text-2xl text-center tenor-sans-regular">"Welcome! I'm here to help you with your essay checking."</h1> <h3><i>Powered by </i><a className="text-white " href="https://wwww.t.me/javohir_fd">Javohir</a></h3></div>
       ) : (
          messages.map((msg, index) => (
           <div
@@ -81,9 +129,13 @@ function App() {
             dangerouslySetInnerHTML={{ __html: msg.content }}
           ></div>
         )))}
-        {loading && <div className="text-gray-500 text-left ml-4 p-3 animate-pulse">...</div>}
+        {loading && <div className="snippet">
+        <div className="stage">
+          <div className="dot-elastic"></div>
+        </div>
+      </div>}
       </div>
-      <div className="w-full max-w-4xl mx-auto flex items-center mt-4 fixed bottom-3">
+      <div className="w-full max-w-4xl mx-auto px-4 flex items-center mt-4 fixed bottom-3">
         <input
           type="text"
           className="flex-1 bg-gray-800 border border-[#3D444D] rounded-md outline-none py-3 px-4 text-white focus:ring-blue-500 pr-12"
