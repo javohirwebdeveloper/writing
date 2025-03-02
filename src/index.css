@@ -3,7 +3,7 @@
 @tailwind utilities;
 .dot-elastic {
   position: relative;
-  margin-left: 58px;
+margin-left: 60px;  
   width: 10px;
   height: 10px;
   border-radius: 5px;

@@ -87,7 +87,8 @@ At the end of your feedback, provide **customized** rapid improvement methods ba
         throw response.body.error;
       }
 
-      const formattedResponse = formatResponse(response.body.choices[0].message.content || "No feedback received.");
+      const formattedResponse = `<div class='flex items-center md:text-2xl text-lg gap-2 mb-2'><img src='${Icon}' class='rounded-full md:w-9 md:h-9 w-8 h-8' alt='Notivo Logo'/><strong>Notivo</strong></div>` +
+      formatResponse(response.body.choices[0].message.content || "No feedback received.");
       const botMessage = { role: "assistant", content: formattedResponse };
       setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
@@ -114,22 +115,23 @@ At the end of your feedback, provide **customized** rapid improvement methods ba
 
   return (
     <div className="min-h-screen bg-gray-800 text-[#dadada] flex flex-col items-center p-2">
-      <div className={`w-full mb-16 max-w-5xl flex-1 ${messages.length === 0 ? "justify-center flex items-center" : ""}  relative overflow-y-auto bg-gray-800 border-[#3D444D] border p-4 rounded-lg shadow-lg`}>
+      <div className={`w-full mb-16 max-w-5xl flex-1 ${messages.length === 0 ? "justify-center flex items-center" : ""}  relative overflow-y-auto bg-gray-800 border-[#3D444D] border md:p-4 p-2 rounded-lg shadow-lg`}>
        {messages.length === 0 ? (
         <div className="flex flex-col items-center gap-2"><img src={Icon} className=" w-28 mb-7 rounded-full" alt="" /><h1 className="text-white text-2xl text-center tenor-sans-regular">"Welcome! I'm here to help you with your essay checking."</h1> <h3><i>Powered by </i><a className="text-white " href="https://wwww.t.me/javohir_fd">Javohir</a></h3></div>
       ) : (
          messages.map((msg, index) => (
           <div
             key={index}
-            className={`p-3 my-2 rounded-lg max-w-[85%] ${
+            className={`md:p-3 p-1 my-2  md:text-md text-base rounded-lg md:max-w-[85%] max-w-full  ${
               msg.role === "user"
-                ? "bg-gray-800 text-left ml-auto mr-4"
-                : "bg-gray-800 text-left ml-4"
+                ? "bg-gray-800 text-left md:mr-4 md:ml-auto ml-4 mr-2"
+                : "bg-gray-800 text-left mt-5 ml-4"
             }`}
             dangerouslySetInnerHTML={{ __html: msg.content }}
           ></div>
         )))}
-        {loading && <div className="snippet">
+        {loading && <div className="snippet md:ml-11 ml-3 mt-5 mb-[50%]">
+          <div className='flex items-center md:text-2xl text-lg gap-2 mb-2'><img src={Icon} className='rounded-full md:w-9 md:h-9 w-7 h-7' alt='Notivo Logo'/><strong>Notivo</strong></div>
         <div className="stage">
           <div className="dot-elastic"></div>
         </div>
@@ -146,7 +148,7 @@ At the end of your feedback, provide **customized** rapid improvement methods ba
         />
         <button
           onClick={sendMessage}
-          className="absolute right-3 p-3 rounded-full"
+          className="absolute right-3 p-3 pr-4 rounded-full"
           disabled={loading}
         >
           <Send className="w-5 h-5 hover:text-blue-400 duration-200 text-blue-600" />
