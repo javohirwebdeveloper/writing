@@ -76,10 +76,8 @@ At the end of your feedback, provide **customized** rapid improvement methods ba
 ,
             userMessage,
           ],
-          model: "gpt-4o",
-          temperature: 1,
-          max_tokens: 4096,
-          top_p: 1,
+          model: "DeepSeek-R1",
+            max_tokens: 2048,
         },
       });
 
