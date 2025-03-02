@@ -117,7 +117,7 @@ At the end of your feedback, provide **customized** rapid improvement methods ba
     <div className="min-h-screen bg-gray-800 text-[#dadada] flex flex-col items-center p-2">
       <div className={`w-full mb-16 max-w-5xl flex-1 ${messages.length === 0 ? "justify-center flex items-center" : ""}  relative overflow-y-auto bg-gray-800 border-[#3D444D] border md:p-4 p-2 rounded-lg shadow-lg`}>
        {messages.length === 0 ? (
-        <div className="flex flex-col items-center gap-2"><img src={Icon} className=" w-28 mb-7 rounded-full" alt="" /><h1 className="text-white text-2xl text-center tenor-sans-regular">"Welcome! I'm here to help you with your essay checking."</h1> <h3><i>Powered by </i><a className="text-white " href="https://www.t.me/javohir_fd">Javohir</a></h3></div>
+        <div className="flex flex-col items-center gap-2"><img src={Icon} className=" w-28 mb-7 rounded-full" alt="" /><h1 className="text-white text-2xl text-center tenor-sans-regular">"Welcome! I'm here to help you with your essay checking."</h1> <h3><i>Powered by </i><a className="text-white " href="https://t.me/javohir_fd">Javohir</a></h3></div>
       ) : (
          messages.map((msg, index) => (
           <div
