@@ -66,10 +66,9 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-800 text-[#dadada] flex flex-col items-center p-4">
-      <h1 className="text-4xl font-bold mb-6">Essay Checker</h1>
       <div className={`w-full mb-16 max-w-5xl flex-1 ${messages.length === 0 ? "justify-center flex items-center" : ""}  relative overflow-y-auto bg-gray-800 border-[#3D444D] border p-4 rounded-lg shadow-lg`}>
        {messages.length === 0 ? (
-        <h1 className="text-white text-2xl text-center">Hi, I can check your essay.</h1>
+        <h1 className="text-white text-2xl text-center">Hi, I can check your essays.</h1>
       ) : (
          messages.map((msg, index) => (
           <div
