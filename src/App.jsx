@@ -19,7 +19,7 @@ function App() {
     try {
       const client = ModelClient(
         "https://models.github.ai/inference",
-        new AzureKeyCredential("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")
+        new AzureKeyCredential("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")
       );
 
       const response = await client.path("/chat/completions").post({
