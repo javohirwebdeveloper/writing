@@ -91,6 +91,10 @@ At the end of your feedback, provide **customized** rapid improvement methods ba
 - If an essay is **strong**, acknowledge it and encourage further development.  
 - If an essay needs work, provide **powerful, strategic solutions** instead of just criticism.  
 - The goal is **rapid and effective progress** for the writer.  
+
+
+
+give a lot of very smart feedback and very smart advice
 ` },
             userMessage,
           ],
@@ -121,8 +125,8 @@ At the end of your feedback, provide **customized** rapid improvement methods ba
             key={index}
             className={`md:p-3 p-1 my-2 ${msg.role === "user" ? "flex justify-end bg-gray-700" :""}  md:text-sm text-xs rounded-lg  ${
               msg.role === "user"
-                ? "bg-gray-800 text-left md:mr-4 md:ml-auto ml-4 mr-2"
-                : "bg-gray-800 text-left mt-5 "
+                ? "bg-gray-700 text-left md:mr-4 md:ml-auto ml-4 mr-2"
+                : "bg-gray-800 mb-32 text-left mt-5 "
             }`}
             dangerouslySetInnerHTML={{ __html: msg.content }}
           ></div>
