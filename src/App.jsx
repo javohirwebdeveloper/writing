@@ -1,8 +1,25 @@
 import React, { useState } from "react";
-import ModelClient, { isUnexpected } from "@azure-rest/ai-inference";
-import { AzureKeyCredential } from "@azure/core-auth";
 import { Send } from "lucide-react";
 import Icon from "./assets/icon.png";
+
+const API_URL = "https://api.gpt4-all.xyz/v1";
+const API_KEY = "g4a-P424liNA4BNxcQjUSZZCzBeMMfmZjtchl5F";
+
+const formatResponse = (text) => {
+    return text
+      .replace(/---/g, "<br><br><hr><br>")
+      .replace(/###\s?/g, "<br>")
+      .replace(/####\s?/g, "<br>")
+      .replace(/#####\s?/g, "<br>")
+      .replace(/##\s?/g, "<br>")
+      .replace(/#\s?/g, "")
+      .replace(/^\-\s?/gm, "<br>• ")
+      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\*(.*?)\*/g, "<i>$1</i>")
+      .replace(/\(\s*<i>(.*?)<\/i>\s*,\s*<i>(.*?)<\/i>\s*\)/g, "(<i>$1</i>, <i>$2</i>)")
+      .replace(/(\d+)\.\s/g, "<br><br>$1. ");
+  };
+
 function App() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
@@ -17,15 +34,18 @@ function App() {
     setLoading(true);
 
     try {
-      const client = ModelClient(
-        "https://models.github.ai/inference",
-        new AzureKeyCredential("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")
-      );
-
-      const response = await client.path("/chat/completions").post({
-        body: {
+      const response = await fetch(`${API_URL}/chat/completions`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${API_KEY}`,
+        },
+        body: JSON.stringify({
+          model: "gpt-4o-mini",
           messages: [
-            { role: "system", content: `You are a highly skilled IELTS examiner and writing coach. Your task is to **fairly** evaluate essays while providing **powerful, practical strategies** to **rapidly improve writing skills**. Your feedback should be **realistic, structured, and motivating**.
+            {
+              role: "system",
+              content: `You are a highly skilled IELTS examiner and writing coach. Your task is to **fairly** evaluate essays while providing **powerful, practical strategies** to **rapidly improve writing skills**. Your feedback should be **realistic, structured, and motivating**.
 
 ## **🚀 Scoring Guidelines (DO NOT Underrate!!!)**
 - **Be fair!!! and objective!!!**. If an essay deserves **Band 8+, do NOT give it 6.5**.  
@@ -71,51 +91,27 @@ At the end of your feedback, provide **customized** rapid improvement methods ba
 - If an essay is **strong**, acknowledge it and encourage further development.  
 - If an essay needs work, provide **powerful, strategic solutions** instead of just criticism.  
 - The goal is **rapid and effective progress** for the writer.  
-` }
-
-,
+` },
             userMessage,
           ],
-          model: "gpt-4o",
-    temperature: 1,
-    max_tokens: 4096,
-    top_p: 1
-        },
+          stream: false,
+        }),
       });
 
-      if (isUnexpected(response)) {
-        throw response.body.error;
-      }
-
-      const formattedResponse = `<div class='flex items-center md:text-xl text-base gap-2 mb-2'><img src='${Icon}' class='rounded-full md:w-8 md:h-8 w-7 h-7' alt='Notivo Logo'/><strong>Notivo</strong></div>` +
-      formatResponse(response.body.choices[0].message.content || "No feedback received.");
-      const botMessage = { role: "assistant", content: formattedResponse };
+      const data = await response.json();
+      const botMessage = {
+        role: "assistant",
+        content: formatResponse(data.choices[0]?.message?.content || "No response"),
+      };
       setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
-      console.error("Error:", error);
-      setMessages((prev) => [...prev, { role: "assistant", content: "Failed to fetch response." }]);
+      setMessages((prev) => [...prev, { role: "assistant", content: "Error checking essay" }]);
     }
     setLoading(false);
   };
 
-  const formatResponse = (text) => {
-    return text
-      .replace(/---/g, "<br><br><hr><br>")
-      .replace(/###\s?/g, "<br>")
-      .replace(/####\s?/g, "<br>")
-      .replace(/#####\s?/g, "<br>")
-      .replace(/##\s?/g, "<br>")
-      .replace(/#\s?/g, "")
-      .replace(/^\-\s?/gm, "<br>• ")
-      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-      .replace(/\*(.*?)\*/g, "<i>$1</i>")
-      .replace(/\(\s*<i>(.*?)<\/i>\s*,\s*<i>(.*?)<\/i>\s*\)/g, "(<i>$1</i>, <i>$2</i>)")
-      .replace(/(\d+)\.\s/g, "<br><br>$1. ");
-  };
-
   return (
     <div className="min-h-screen bg-gray-800 text-[#dadada] flex flex-col items-center p-2">
-      
       <div className={`w-full mb-2 max-w-7xl flex-1 ${messages.length === 0 ? "justify-center flex items-center" : ""}  relative overflow-y-auto mx-auto bg-gray-800 border-[#3D444D] border md:p-4 md:px-20 p-2 rounded-lg shadow-lg`}>
        {messages.length === 0 ? (
         <div className="flex flex-col items-center gap-2"><img src={Icon} className=" w-16 mb-7 rounded-full" alt="" /> <h1 className="text-3xl text-white font-semibold">Notivo-v1</h1><h2 className="text-[#9198A1] text-md text-center tenor-sans-regular">Notivo is an essay checker and enhance your writing. Get precise feedback, structured scoring, improve your essays effectively.</h2></div>
@@ -138,6 +134,7 @@ At the end of your feedback, provide **customized** rapid improvement methods ba
         </div>
       </div>}
       </div>
+
       <div className="w-full max-w-4xl mx-auto px-4 flex items-center mt-4 fixed bottom-7">
         <input
           type="text"
@@ -147,12 +144,8 @@ At the end of your feedback, provide **customized** rapid improvement methods ba
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && sendMessage()}
         />
-        <button
-          onClick={sendMessage}
-          className="absolute right-3 p-3 pr-5 rounded-full"
-          disabled={loading}
-        >
-          <Send className={`${input === "" ? "text-[#dadada]" : "text-blue-500  hover:text-blue-400"} w-5 h-5 duration-200 `} />
+        <button onClick={sendMessage} className="absolute right-3 p-3 pr-5 rounded-full" disabled={loading}>
+          <Send className={`${input === "" ? "text-[#dadada]" : "text-blue-500 hover:text-blue-400"} w-5 h-5 duration-200 `} />
         </button>
       </div>
     </div>
